@@ -4,7 +4,8 @@
   "description": "Tirocinio Formativo Factorymind",
   "main": "index.js",
   "scripts": {
-    "lesson1-e1": "tsc && node dist/main.js"
+    "lesson1-e1": "tsc && node dist/exercise1/src/main.js",
+    "lesson1-e2": "tsc && node dist/exercise2/src/CastomMap.js"
   },
   "keywords": [],
   "author": "",
