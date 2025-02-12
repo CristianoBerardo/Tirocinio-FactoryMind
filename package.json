@@ -1,0 +1,19 @@
+{
+  "name": "tirocinio-factorymind",
+  "version": "1.0.0",
+  "description": "Tirocinio Formativo Factorymind",
+  "main": "index.js",
+  "scripts": {
+    "lesson1-e1": "tsc && node dist/main.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@eslint/js": "^9.20.0",
+    "eslint": "^9.20.1",
+    "globals": "^15.14.0",
+    "typescript": "^5.7.3",
+    "typescript-eslint": "^8.24.0"
+  }
+}
