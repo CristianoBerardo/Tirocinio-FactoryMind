@@ -1,8 +1,8 @@
-import { AbstractVehicle, IVehicle } from "./AbstractVehicle";
+import { AbstractVehicle, IVehicle, VeichleProps } from "./AbstractVehicle";
 
 export class Car extends AbstractVehicle implements IVehicle {
-  constructor(name: string, speed: number) {
-    super(name, speed);
+  constructor({ name, speed, vId }: VeichleProps) {
+    super({ name, speed, vId });
   }
   public accelerate(): void {
     this.speed += 10;
