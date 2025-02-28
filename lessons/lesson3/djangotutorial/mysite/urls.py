@@ -18,6 +18,8 @@ from django.contrib import admin
 from django.urls import include, path
 
 urlpatterns = [
-    path("polls", include("polls.urls")),
-    path("admin", admin.site.urls),
+    # path() function is passed four arguments, two required: route and view, and two optional: kwargs, and name.
+    # include() allows referencing other URLconfs
+    path("polls/", include("polls.urls")),
+    path("admin/", admin.site.urls),
 ]
