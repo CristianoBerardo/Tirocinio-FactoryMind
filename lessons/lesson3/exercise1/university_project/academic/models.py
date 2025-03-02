@@ -1,6 +1,48 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 
+# -----------START CREATE NEW MODELS HERE----------------
+
+class Student(models.Model):
+    student_id = models.IntegerField(primary_key=True, auto_created=True)
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
+    email = models.EmailField(max_length=100)
+    born_date = models.DateField()
+
+    courses = models.ManyToManyField('Course', through='Enrollment')
+    # exams = models.ManyToManyField('Exam', editable=True)
+    
+    def __str__(self):
+        return f"{self.student_id}"
+    
+    class Meta:
+        ordering = ['student_id']
+        verbose_name = 'Student'
+        verbose_name_plural = 'Students'
+
+
+
+
+
+# -----------END CREATE NEW MODELS HERE----------------
+
+# class Student(models.Model):
+#     student_id = models.IntegerField(primary_key=True)
+#     first_name = models.CharField(max_length=100)
+#     last_name = models.CharField(max_length=100)
+#     email = models.EmailField(max_length=100)
+#     born_date = models.DateField()
+#     # courses = models.ManyToManyField(Course, through='Enrollment')
+
+#     def __str__(self):
+#         return f"{self.student_id} - {self.first_name} {self.last_name}"
+    
+#     class Meta:
+#         ordering = ['last_name']
+#         verbose_name = 'Student'
+#         verbose_name_plural = 'Students'
+
 class Teacher(models.Model):
     teacher_id = models.IntegerField(primary_key=True)
     first_name = models.CharField(max_length=100)
@@ -23,6 +65,13 @@ class Course(models.Model):
     students = models.ManyToManyField('Student', through='Enrollment')
     credits = models.PositiveSmallIntegerField()
 
+
+
+
+
+
+    
+
     def __str__(self):
         return f"{self.course_id} - {self.name}"
     
@@ -31,21 +80,7 @@ class Course(models.Model):
         verbose_name = 'Course'
         verbose_name_plural = 'Courses'
 
-class Student(models.Model):
-    student_id = models.IntegerField(primary_key=True)
-    first_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
-    email = models.EmailField(max_length=100)
-    born_date = models.DateField()
-    # courses = models.ManyToManyField(Course, through='Enrollment')
 
-    def __str__(self):
-        return f"{self.student_id} - {self.first_name} {self.last_name}"
-    
-    class Meta:
-        ordering = ['last_name']
-        verbose_name = 'Student'
-        verbose_name_plural = 'Students'
 
 class Enrollment(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
@@ -62,6 +97,7 @@ class Exam(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     exam_date = models.DateField()
     grade = models.PositiveSmallIntegerField(validators=[MinValueValidator(18), MaxValueValidator(32)])
+
 
     def __str__(self):
         voto_str = f"{self.voto}{'L' if self.grade == 32 else ''}"

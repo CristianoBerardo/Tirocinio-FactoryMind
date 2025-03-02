@@ -6,6 +6,10 @@ from django.shortcuts import render
 from rest_framework import viewsets
 from .models import Teacher, Course, Student, Enrollment, Exam
 from .serializers import TeacherSerializer, CourseSerializer, StudentSerializer, ExamSerializer
+from rest_framework.decorators import action
+from rest_framework.response import Response
+from rest_framework import status
+from .serializers import StudentEnrollmentSerializer
 
 class TeacherViewSet(viewsets.ModelViewSet):
     queryset = Teacher.objects.all()
@@ -28,6 +32,71 @@ class CourseViewSet(viewsets.ModelViewSet):
         if course_name is not None:
             queryset = queryset.filter(teacher__last_name=course_name )
         return queryset
+    
+    
+
+
+
+
+
+
+    @action(detail=True, methods=['get', 'post'], url_path='enroll-students')
+    def enroll_students(self, request, pk=None):
+        """
+        GET: Mostra il form per iscrivere studenti
+        POST: Processa l'iscrizione degli studenti
+        """
+        corso = self.get_object()
+        
+        if request.method == 'GET':
+            serializer = StudentEnrollmentSerializer()
+            return Response(serializer.data)
+        
+        serializer = StudentEnrollmentSerializer(data=request.data)
+        if serializer.is_valid():
+            student_ids = serializer.validated_data['student_ids']
+            
+            # Trova gli studenti esistenti con gli ID forniti
+            studenti = Student.objects.filter(id__in=student_ids)
+            
+            # Controlla se tutti gli ID forniti esistono
+            found_ids = [studente.id for studente in studenti]
+            not_found_ids = [id for id in student_ids if id not in found_ids]
+            
+            if not_found_ids:
+                return Response(
+                    {"error": f"Studenti con ID {not_found_ids} non trovati"}, 
+                    status=status.HTTP_404_NOT_FOUND
+                )
+            
+            # Per ogni studente, crea un record di Esame (se non esiste già)
+            esami_creati = 0
+            for studente in studenti:
+                esame, created = Exam.objects.get_or_create(
+                    studente=studente,
+                    corso=corso,
+                    defaults={'data': None, 'voto': None}
+                )
+                if created:
+                    esami_creati += 1
+            
+            return Response({
+                "message": f"{esami_creati} studenti iscritti al corso con successo",
+                "enrolled": [s.id for s in studenti]
+            })
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    @action(detail=True, methods=['get'], url_path='enrolled-students')
+    def enrolled_students(self, request, pk=None):
+        """
+        Lista degli studenti iscritti al corso
+        """
+        corso = self.get_object()
+        studenti = Student.objects.filter(esami__corso=corso).distinct()
+        
+        serializer = StudentSerializer(studenti, many=True)
+        return Response(serializer.data)
     
     @action(detail=True, methods=['get'], url_path='export-studenti-csv')
     def export_studenti_csv(self, request, pk=None):
