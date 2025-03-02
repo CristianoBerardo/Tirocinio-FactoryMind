@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from django.shortcuts import render
 from rest_framework import viewsets
 from .models import Teacher, Course, Student, Enrollment, Exam
-from .serializers import TeacherSerializer, CourseSerializer, StudentSerializer, ExamSerializer
+from .serializers import TeacherSerializer, CourseSerializer, StudentSerializer, ExamSerializer, EnrollmentSerializer
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import status
@@ -33,13 +33,6 @@ class CourseViewSet(viewsets.ModelViewSet):
             queryset = queryset.filter(teacher__last_name=course_name )
         return queryset
     
-    
-
-
-
-
-
-
     @action(detail=True, methods=['get', 'post'], url_path='enroll-students')
     def enroll_students(self, request, pk=None):
         """
@@ -170,3 +163,42 @@ class ExamViewSet(viewsets.ModelViewSet):
             queryset = queryset.filter(corso__id=corso_id)
         return queryset
     
+class EnrolmentViewSet(viewsets.ModelViewSet):
+     queryset = Enrollment.objects.all()
+     serialzer_class = EnrollmentSerializer
+
+# from rest_framework import generics
+# from .models import Teacher, Course, Student, Exam
+# from .serializers import TeacherSerializer, CourseSerializer, StudentSerializer, ExamSerializer
+
+# class TeacherListCreate(generics.ListCreateAPIView):
+#     queryset = Teacher.objects.all()
+#     serializer_class = TeacherSerializer
+
+# class TeacherRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+#     queryset = Teacher.objects.all()
+#     serializer_class = TeacherSerializer
+
+# class CourseListCreate(generics.ListCreateAPIView):
+#     queryset = Course.objects.all()
+#     serializer_class = CourseSerializer
+
+# class CourseRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+#     queryset = Course.objects.all()
+#     serializer_class = CourseSerializer
+
+# class StudentListCreate(generics.ListCreateAPIView):
+#     queryset = Student.objects.all()
+#     serializer_class = StudentSerializer
+
+# class StudentRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+#     queryset = Student.objects.all()
+#     serializer_class = StudentSerializer
+
+# class ExamListCreate(generics.ListCreateAPIView):
+#     queryset = Exam.objects.all()
+#     serializer_class = ExamSerializer
+
+# class ExamRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+#     queryset = Exam.objects.all()
+#     serializer_class = ExamSerializer

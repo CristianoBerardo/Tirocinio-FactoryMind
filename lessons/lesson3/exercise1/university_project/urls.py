@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from .academic.views import TeacherViewSet, CourseViewSet, StudentViewSet, ExamViewSet
+from .academic.views import EnrolmentViewSet, TeacherViewSet, CourseViewSet, StudentViewSet, ExamViewSet
 from rest_framework import routers
 
 router = routers.DefaultRouter()
@@ -24,12 +24,23 @@ router.register(r'teachers', TeacherViewSet)
 router.register(r'courses', CourseViewSet)
 router.register(r'students', StudentViewSet)
 router.register(r'exams', ExamViewSet)
+router.register(r'enrolment', EnrolmentViewSet)
 # from .views import StudentiByCorsoCsvView
-
- 
-
 urlpatterns = [
     # ... url esistenti ...
     # path('api/corsi/<int:corso_id>/studenti-csv/', StudentiByCorsoCsvView.as_view(), name='corso-studenti-csv'),
     path('api/', include(router.urls)),
 ]
+
+# from django.urls import path
+# from . import views
+# urlpatterns = [
+#     path('teachers/', views.TeacherListCreate.as_view()),
+#     path('teachers/<int:pk>/', views.TeacherRetrieveUpdateDestroy.as_view()),
+#     path('courses/', views.CourseListCreate.as_view()),
+#     path('courses/<int:pk>/', views.CourseRetrieveUpdateDestroy.as_view()),
+#     path('students/', views.StudentListCreate.as_view()),
+#     path('students/<int:pk>/', views.StudentRetrieveUpdateDestroy.as_view()),
+#     path('exams/', views.ExamListCreate.as_view()),
+#     path('exams/<int:pk>/', views.ExamRetrieveUpdateDestroy.as_view()),
+# ]
