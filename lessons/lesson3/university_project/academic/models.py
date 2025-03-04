@@ -12,7 +12,7 @@ class Teacher(models.Model):
 
 class Course(models.Model):
     title = models.CharField(max_length=200)
-    code = models.CharField(max_length=20, unique=True)
+    # code = models.CharField(max_length=20, unique=True)
     description = models.TextField(blank=True)
     credits = models.PositiveSmallIntegerField()
     teacher = models.ForeignKey(Teacher, related_name='courses', on_delete=models.CASCADE)

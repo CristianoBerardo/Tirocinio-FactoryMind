@@ -24,10 +24,10 @@ class TeacherViewSet(viewsets.ModelViewSet):
         response['Content-Disposition'] = f'attachment; filename="{teacher.last_name}_courses.csv"'
         
         writer = csv.writer(response)
-        writer.writerow(['Code', 'Title', 'Description', 'Credits'])
+        writer.writerow(['Id', 'Title', 'Description', 'Credits'])
         
         for course in courses:
-            writer.writerow([course.code, course.title, course.description, course.credits])
+            writer.writerow([course.id, course.title, course.description, course.credits])
             
         return response
     
@@ -66,7 +66,7 @@ class StudentViewSet(viewsets.ModelViewSet):
 class CourseViewSet(viewsets.ModelViewSet):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
-    filterset_fields = ['teacher', 'code']
+    filterset_fields = ['teacher', 'id']
     
     @action(detail=True, methods=['get'])
     def students_csv(self, request, pk=None):
@@ -77,7 +77,7 @@ class CourseViewSet(viewsets.ModelViewSet):
         students = Student.objects.filter(exams__course=course).distinct()
         
         response = HttpResponse(content_type='text/csv')
-        response['Content-Disposition'] = f'attachment; filename="{course.code}_students.csv"'
+        response['Content-Disposition'] = f'attachment; filename="{course.id}_students.csv"'
         
         writer = csv.writer(response)
         writer.writerow(['Student ID', 'First Name', 'Last Name', 'Email'])
