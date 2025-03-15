@@ -1,0 +1,46 @@
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+.component {
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 15px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+.incrementer {
+  background-color: #e6f7ff;
+  border-color: #91d5ff;
+}
+.decrementer {
+  background-color: #fff7e6;
+  border-color: #ffd591;
+}
+button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-top: 10px;
+}
+.increment-btn {
+  background-color: #1890ff;
+  color: white;
+}
+.decrement-btn {
+  background-color: #fa8c16;
+  color: white;
+}
+h2 {
+  margin-top: 0;
+  color: #333;
+}
+.counter {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 10px 0;
+}

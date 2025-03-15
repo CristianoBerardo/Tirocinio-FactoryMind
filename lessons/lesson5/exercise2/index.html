@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Comunicazione tra Componenti in Vue.js</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.3.4/vue.global.min.js"></script>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div id="app">
+      <h1>Comunicazione tra Componenti in Vue.js</h1>
+      <counter-display></counter-display>
+      <incrementer-component></incrementer-component>
+      <decrementer-component
+        title="Primo Decrementatore"
+      ></decrementer-component>
+      <decrementer-component
+        title="Secondo Decrementatore"
+      ></decrementer-component>
+      <decrementer-component
+        title="Terzo Decrementatore"
+      ></decrementer-component>
+    </div>
+    <script src="./scripts.js"></script>
+  </body>
+</html>
