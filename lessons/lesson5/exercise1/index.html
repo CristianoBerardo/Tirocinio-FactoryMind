@@ -10,27 +10,28 @@
 
       <h2>Dimostrazione Ref() function</h2>
 
-      <p>Valore contatore: <span id="contatore">10</span></p>
-      <button id="incButton">Incrementa</button>
-      <button id="decButton">Decrementa</button>
-      <button id="resetButton" class="resetButton">Reset</button>
+      <p>Valore contatore: <span>{{counter}}</span></p>
+      <p>Data corrente: {{Date.now()}}</p>
+      <button @click="increment">Incrementa</button>
+      <button @click="decrement">Decrementa</button>
+      <button @click="reset" class="resetButton">Reset</button>
 
       <h2>Dimostrazione Computed() function</h2>
       <div>
         <label for="firstName">Nome:</label>
-        <input type="text" id="firstName" placeholder="Inserisci nome" />
+        <input type="text" v-model="firstName" placeholder="Inserisci nome" />
       </div>
       <div>
         <label for="lastName">Cognome:</label>
-        <input type="text" id="lastName" placeholder="Inserisci cognome" />
+        <input type="text" v-model="lastName" placeholder="Inserisci cognome" />
       </div>
 
-      <button id="resetButtonName" class="resetButton">Reset</button>
+      <button @click="resetName" class="resetButton">Reset</button>
 
-      <p>Nome completo: <span id="fullName"></span></p>
+      <p>Nome completo: <span>{{fullName}}</span></p>
       <p>
         Nome completo invertito:
-        <span id="reversedName"></span>
+        <span>{{reversedName}}</span>
       </p>
     </div>
 
