@@ -71,7 +71,6 @@ function computed(subscribers, getter) {
  * @param {Object} reactiveState - Object containing all reactive properties
  */
 function processTemplate(rootElement, reactiveState) {
-  // Process all nodes in the DOM recursively
   function walkDOM(node) {
     // 1. Process text nodes containing {{ expressions }}
     if (node.nodeType === Node.TEXT_NODE) {
@@ -117,7 +116,62 @@ function processTemplate(rootElement, reactiveState) {
       }
     }
 
-    // 4. Process all child nodes recursively
+    // 4. Process elements with @emit directives
+    if (node.nodeType === Node.ELEMENT_NODE) {
+      // Process all attributes
+      Array.from(node.attributes).forEach((attr) => {
+        // Check for emit directives (@emit:event-name)
+        if (attr.name.startsWith("@emit:")) {
+          const eventName = attr.name.substring(6); // Remove '@emit:'
+          const emitValue = attr.value; // This can reference reactive state
+
+          // Add click handler to emit the event
+          node.addEventListener("click", () => {
+            // Evaluate complex expressions that appear to be function calls
+            let payload;
+
+            if (emitValue.includes("createNotification(")) {
+              // Extract parameters from the function call
+              const match = emitValue.match(
+                /createNotification\(['"](.+?)['"],\s*['"](.+?)['"]\)/
+              );
+              if (match) {
+                const type = match[1];
+                const message = match[2];
+                payload = createNotification(type, message);
+              } else {
+                console.error("Invalid createNotification format:", emitValue);
+              }
+            } else if (emitValue && reactiveState[emitValue]) {
+              payload = reactiveState[emitValue].value;
+            } else {
+              // Simple static value
+              payload = emitValue;
+            }
+
+            console.log(`Emitting event: ${eventName} with payload:`, payload);
+            eventBus.emit(eventName, payload);
+          });
+        }
+
+        // Check for event listeners (@on:event-name)
+        if (attr.name.startsWith("@on:")) {
+          const eventName = attr.name.substring(4); // Remove '@on:'
+          const handlerName = attr.value;
+
+          // Register handler for this event
+          eventBus.on(eventName, (payload) => {
+            console.log(`Handling event: ${eventName} with payload:`, payload);
+            // Call the handler function if it exists
+            if (typeof window[handlerName] === "function") {
+              window[handlerName](payload);
+            }
+          });
+        }
+      });
+    }
+
+    // 5. Process all child nodes recursively
     for (const childNode of node.childNodes) {
       walkDOM(childNode);
     }
@@ -259,6 +313,103 @@ function evaluateExpression(expression, reactiveState) {
   }
 }
 
+/**
+ * Simple event bus to handle custom events (similar to Vue's $emit)
+ */
+class EventBus {
+  constructor() {
+    this.events = {};
+  }
+
+  /**
+   * Register an event handler
+   * @param {string} event - Event name
+   * @param {Function} callback - Handler function
+   */
+  on(event, callback) {
+    if (!this.events[event]) {
+      this.events[event] = [];
+    }
+    this.events[event].push(callback);
+  }
+
+  /**
+   * Emit an event with optional payload
+   * @param {string} event - Event name
+   * @param {any} payload - Data to pass to handlers
+   */
+  emit(event, payload) {
+    const handlers = this.events[event];
+    if (handlers) {
+      handlers.forEach((handler) => handler(payload));
+    }
+  }
+}
+
+// Create a global event bus
+const eventBus = new EventBus();
+
+// Handler function that will be called when the event is emitted
+function handleUserAction(payload) {
+  console.log("User action received:", payload);
+  document.querySelector(
+    ".event-receiver"
+  ).textContent = `Event received with payload: ${payload}`;
+}
+
+// Add this to your scripts
+function handleNotification(notificationData) {
+  const container = document.getElementById("notifications-container");
+
+  // Clear the "No notifications" message if it's the first notification
+  if (container.textContent.trim() === "No notifications yet") {
+    container.textContent = "";
+  }
+
+  // Create notification element
+  const notif = document.createElement("div");
+  notif.className = `notification ${notificationData.type}-notification`;
+  notif.innerHTML = `
+          <span class="notification-time">${notificationData.timestamp}</span>
+          <strong>${notificationData.type.toUpperCase()}:</strong> 
+          ${notificationData.message}
+          <button class="close-btn">&times;</button>
+        `;
+
+  // Add notification dismiss functionality
+  const closeBtn = notif.querySelector(".close-btn");
+  closeBtn.addEventListener("click", () => {
+    notif.classList.add("removing");
+    setTimeout(() => {
+      notif.remove();
+
+      // If no notifications left, show the placeholder
+      if (container.children.length === 0) {
+        container.textContent = "No notifications yet";
+      }
+    }, 300);
+  });
+
+  // Add to container
+  container.appendChild(notif);
+
+  // Auto-remove after 5 seconds
+  setTimeout(() => {
+    if (notif.parentNode) {
+      notif.classList.add("removing");
+      setTimeout(() => {
+        if (notif.parentNode) {
+          notif.remove();
+
+          // If no notifications left, show the placeholder
+          if (container.children.length === 0) {
+            container.textContent = "No notifications yet";
+          }
+        }
+      }, 300);
+    }
+  }, 5000);
+}
 // Initialize reactive state
 const state = {
   counter: ref(defaultValues.counter),
@@ -274,6 +425,22 @@ state.fullName = computed([state.firstName, state.lastName], () => {
 state.reversedName = computed([state.fullName], () => {
   return state.fullName.value.split("").reverse().join("");
 });
+
+/**
+ * Create different types of notifications
+ * @param {string} type - The type of notification
+ * @param {string} message - The message of the notification
+ * @returns {Object} - The notification object
+ */
+function createNotification(type, message) {
+  const notification = {
+    id: Date.now(),
+    type,
+    message,
+    timestamp: new Date().toLocaleTimeString(),
+  };
+  return notification;
+}
 
 // Initialize the application when DOM is fully loaded
 document.addEventListener("DOMContentLoaded", () => {

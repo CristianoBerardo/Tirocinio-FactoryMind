@@ -39,3 +39,93 @@ input {
 .resetButton {
   background-color: #e9847d;
 }
+
+.notification-controls {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.warning-btn {
+  background-color: #f0ad4e;
+}
+
+.error-btn {
+  background-color: #e9847d;
+}
+
+.notification-area {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 10px;
+  margin-top: 15px;
+  background-color: #f9f9f9;
+}
+
+.notification {
+  padding: 10px;
+  margin-bottom: 8px;
+  border-radius: 4px;
+  position: relative;
+  animation: slideIn 0.3s ease-out;
+  display: flex;
+  align-items: center;
+}
+
+.notification.removing {
+  animation: slideOut 0.3s ease-in forwards;
+}
+
+.info-notification {
+  background-color: #d9edf7;
+  border-left: 4px solid #31708f;
+}
+
+.warning-notification {
+  background-color: #fcf8e3;
+  border-left: 4px solid #8a6d3b;
+}
+
+.error-notification {
+  background-color: #f2dede;
+  border-left: 4px solid #a94442;
+}
+
+.notification-time {
+  font-size: 0.8em;
+  color: #777;
+  margin-right: 10px;
+}
+
+.close-btn {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 0 5px;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+}
