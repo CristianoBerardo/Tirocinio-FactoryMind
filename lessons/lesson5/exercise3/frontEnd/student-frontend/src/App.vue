@@ -2,7 +2,7 @@
   <q-layout view="hHh lpR fFf">
     <q-header elevated class="bg-primary text-white">
       <q-toolbar>
-        <q-toolbar-title> Student Management System </q-toolbar-title>
+        <q-toolbar-title> Vue.js + Django + Quasar </q-toolbar-title>
       </q-toolbar>
     </q-header>
 

@@ -2,6 +2,7 @@
 
 <template>
   <div class="student-table">
+    <h2>Vue.js + Django + Quasar</h2>
     <!-- Rest of the template remains the same -->
 
     <!-- Add New Student Button -->

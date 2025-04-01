@@ -1,4 +1,5 @@
 <template>
+  <h2>Vue.js + Django + Quasar</h2>
   <q-form @submit.prevent="submitForm" class="q-gutter-md">
     <q-input
       v-model="form.name"

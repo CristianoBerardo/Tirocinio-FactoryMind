@@ -1,13 +1,13 @@
 <template>
   <div class="student-table">
-    <h2>Student Management System</h2>
-    
+    <h2>Vue.js + Django + Quasar</h2>
+
     <!-- Loading state -->
     <div v-if="loading" class="text-center q-pa-md">
       <q-spinner color="primary" size="3em" />
       <p>Loading students...</p>
     </div>
-    
+
     <!-- Error state -->
     <q-banner v-if="error" class="bg-negative text-white q-mb-md">
       {{ error }}
@@ -15,21 +15,15 @@
         <q-btn flat color="white" label="Retry" @click="fetchStudents" />
       </template>
     </q-banner>
-    
+
     <!-- Search and filters -->
     <div class="q-pa-md">
-      <q-input
-        v-model="filter"
-        dense
-        clearable
-        placeholder="Search students"
-        class="q-mb-md"
-      >
+      <q-input v-model="filter" dense clearable placeholder="Search students" class="q-mb-md">
         <template v-slot:append>
           <q-icon name="search" />
         </template>
       </q-input>
-      
+
       <div class="row q-col-gutter-sm">
         <div class="col-12 col-sm-6 col-md-3">
           <q-select
@@ -47,7 +41,7 @@
         </div>
       </div>
     </div>
-    
+
     <!-- Student Table -->
     <q-table
       :rows="filteredStudents"
@@ -55,8 +49,7 @@
       row-key="id"
       :loading="loading"
       :filter="filter"
-      :pagination.sync="pagination"
-    >
+      ><!-- :pagination.sync="pagination" -->
       <!-- Custom header slot if needed -->
       <template v-slot:header="props">
         <q-tr :props="props">
@@ -66,7 +59,7 @@
           <q-th>Actions</q-th>
         </q-tr>
       </template>
-      
+
       <!-- Body slot for custom rendering -->
       <template v-slot:body="props">
         <q-tr :props="props">
@@ -78,11 +71,7 @@
               </q-badge>
             </template>
             <template v-else-if="col.name === 'gpa'">
-              <q-chip
-                :color="getGpaColor(props.row.gpa)"
-                text-color="white"
-                size="sm"
-              >
+              <q-chip :color="getGpaColor(props.row.gpa)" text-color="white" size="sm">
                 {{ props.row.gpa }}
               </q-chip>
             </template>
@@ -93,7 +82,7 @@
               {{ props.row[col.name] }}
             </template>
           </q-td>
-          
+
           <!-- Actions column -->
           <q-td auto-width>
             <q-btn size="sm" color="primary" icon="edit" dense flat />
@@ -120,7 +109,7 @@ export default {
       gradeFilter: 'All',
       activeOnly: false,
       pagination: {
-        rowsPerPage: 10
+        rowsPerPage: 10,
       },
       columns: [
         { name: 'id', label: 'ID', field: 'id', sortable: true, align: 'left' },
@@ -128,33 +117,38 @@ export default {
         { name: 'email', label: 'Email', field: 'email', sortable: true, align: 'left' },
         { name: 'grade', label: 'Grade', field: 'grade', sortable: true, align: 'center' },
         { name: 'gpa', label: 'GPA', field: 'gpa', sortable: true, align: 'center' },
-        { name: 'enrollment_date', label: 'Enrollment Date', field: 'enrollment_date', sortable: true },
-        { name: 'active', label: 'Status', field: 'active', sortable: true, align: 'center' }
-      ]
+        {
+          name: 'enrollment_date',
+          label: 'Enrollment Date',
+          field: 'enrollment_date',
+          sortable: true,
+        },
+        { name: 'active', label: 'Status', field: 'active', sortable: true, align: 'center' },
+      ],
     }
   },
   computed: {
     filteredStudents() {
       let filtered = [...this.students]
-      
+
       // Apply grade filter
       if (this.gradeFilter !== 'All') {
-        filtered = filtered.filter(student => student.grade === this.gradeFilter)
+        filtered = filtered.filter((student) => student.grade === this.gradeFilter)
       }
-      
+
       // Apply active filter
       if (this.activeOnly) {
-        filtered = filtered.filter(student => student.active)
+        filtered = filtered.filter((student) => student.active)
       }
-      
+
       return filtered
-    }
+    },
   },
   methods: {
     async fetchStudents() {
       this.loading = true
       this.error = null
-      
+
       try {
         const response = await axios.get('http://localhost:8000/api/students/')
         this.students = response.data
@@ -173,11 +167,11 @@ export default {
       if (gpa >= 3.0) return 'primary'
       if (gpa >= 2.5) return 'warning'
       return 'negative'
-    }
+    },
   },
   created() {
     this.fetchStudents()
-  }
+  },
 }
 </script>
 
