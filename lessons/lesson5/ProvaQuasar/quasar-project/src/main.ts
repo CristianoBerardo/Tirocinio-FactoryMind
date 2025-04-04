@@ -19,7 +19,7 @@ const app = createApp(App)
 
 // Register Quasar
 app.use(Quasar, {
-  plugins: {}, // import Quasar plugins and add here
+  plugins: {},
   config: {},
 })
 

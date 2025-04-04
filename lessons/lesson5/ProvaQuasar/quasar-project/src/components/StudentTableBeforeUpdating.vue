@@ -160,7 +160,7 @@ export default {
       }
     },
     formatDate(dateStr) {
-      return date.formatDate(dateStr, 'MMMM D, YYYY')
+      return date.formatDate(dateStr, 'D MMMM YYYY')
     },
     getGpaColor(gpa) {
       if (gpa >= 3.5) return 'positive'

@@ -34,21 +34,19 @@
         <span>{{reversedName}}</span>
       </p>
 
-      <h2>Event Emission Demo</h2>
+      <h2>Emit Demo</h2>
       <div class="notification-controls">
-        <button
-          @emit:notification="createNotification('info', 'This is an info message')"
-        >
+        <button @emit:notification="createNotification('info', 'Info')">
           Emit Info
         </button>
         <button
-          @emit:notification="createNotification('warning', 'Warning! Something needs attention')"
+          @emit:notification="createNotification('warning', 'Attenzione!')"
           class="warning-btn"
         >
           Emit Warning
         </button>
         <button
-          @emit:notification="createNotification('error', 'Error! Something went wrong')"
+          @emit:notification="createNotification('error', 'Errore!')"
           class="error-btn"
         >
           Emit Error
@@ -57,11 +55,10 @@
 
       <div @on:notification="handleNotification" class="notification-area">
         <h3>Notifications</h3>
-        <div id="notifications-container">No notifications yet</div>
+        <div id="notifications-container">Nessuna notifica</div>
       </div>
     </div>
 
     <script src="./scripts.js"></script>
-
   </body>
 </html>
