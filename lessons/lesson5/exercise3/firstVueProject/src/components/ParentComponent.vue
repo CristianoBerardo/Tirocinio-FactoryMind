@@ -7,7 +7,8 @@ export default {
   },
   data() {
     return {
-      message: 'Hello from parent',
+      message: { value: 'Hello from parent' },
+      // message: 'Hello from parent',
       counter: 0,
     }
   },
@@ -27,7 +28,6 @@ export default {
     <ChildComponent :message="message" :counter="counter" :incrementCounter="incrementCounter" />
   </div>
 </template>
-
 
 <style scoped>
 h2 {

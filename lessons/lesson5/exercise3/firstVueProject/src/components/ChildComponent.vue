@@ -1,15 +1,15 @@
 <script>
 export default {
   props: {
-    message: String,
+    message: Object,
     counter: Number,
     incrementCounter: Function,
   },
   methods: {
     tryToMutateProps() {
       // This will cause a Vue warning in development mode
-      this.message = 'Changed in child' // This will trigger a warning
-      this.counter++ // This will trigger a warning
+      this.message.value = 'altro' // Tutto ok, è un oggetto
+      // this.counter++ // This will trigger a warning
     },
   },
 }

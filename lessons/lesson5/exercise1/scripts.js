@@ -12,11 +12,6 @@ const ctx = {
   Date: Date,
 };
 
-/**
- * Creates a reactive reference similar to Vue's ref()
- * @param {any} initialValue - The initial value to store
- * @returns {Object} - A reactive reference object with getter/setter and subscribe method
- */
 function ref(initialValue) {
   let value = initialValue;
   const subscribers = [];
@@ -44,12 +39,6 @@ function ref(initialValue) {
   };
 }
 
-/**
- * Creates a computed property similar to Vue's computed()
- * @param {Array} subscribers - Array of reactive refs this computed depends on
- * @param {Function} getter - Function that computes the value
- * @returns {Object} - A reactive reference to the computed value
- */
 function computed(subscribers, getter) {
   // Create a reactive ref with the initial computed value
   const result = ref(getter());
@@ -65,11 +54,6 @@ function computed(subscribers, getter) {
   return result;
 }
 
-/**
- * Process the DOM to find and handle template expressions and directives
- * @param {Node} rootElement - The root DOM element to process
- * @param {Object} reactiveState - Object containing all reactive properties
- */
 function processTemplate(rootElement, reactiveState) {
   function walkDOM(node) {
     // 1. Process text nodes containing {{ expressions }}
@@ -181,12 +165,6 @@ function processTemplate(rootElement, reactiveState) {
   walkDOM(rootElement);
 }
 
-/**
- * Process a text node containing template expressions {{ }}
- * @param {Node} textNode - The text node to process
- * @param {string} text - The text content
- * @param {Object} reactiveState - Reactive state object
- */
 function processTextNode(textNode, text, reactiveState) {
   const expressionRegex = /\{\{(.*?)\}\}/g;
   const parts = [];
@@ -245,12 +223,6 @@ function processTextNode(textNode, text, reactiveState) {
   });
 }
 
-/**
- * Update the content of a container with dynamic expressions
- * @param {Element} container - The container element
- * @param {Array} parts - Array of static and dynamic parts
- * @param {Object} reactiveState - Reactive state object
- */
 function updateDynamicContent(container, parts, reactiveState) {
   let content = "";
 
@@ -268,12 +240,6 @@ function updateDynamicContent(container, parts, reactiveState) {
   container.textContent = content;
 }
 
-/**
- * Evaluate a template expression and return its value
- * @param {string} expression - The expression to evaluate
- * @param {Object} reactiveState - Reactive state object
- * @returns {string} - The evaluated result as a string
- */
 function evaluateExpression(expression, reactiveState) {
   // Handle direct property access (most common case)
   if (reactiveState[expression]) {
@@ -321,11 +287,6 @@ class EventBus {
     this.events = {};
   }
 
-  /**
-   * Register an event handler
-   * @param {string} event - Event name
-   * @param {Function} callback - Handler function
-   */
   on(event, callback) {
     if (!this.events[event]) {
       this.events[event] = [];
@@ -333,11 +294,6 @@ class EventBus {
     this.events[event].push(callback);
   }
 
-  /**
-   * Emit an event with optional payload
-   * @param {string} event - Event name
-   * @param {any} payload - Data to pass to handlers
-   */
   emit(event, payload) {
     const handlers = this.events[event];
     if (handlers) {
@@ -426,12 +382,6 @@ state.reversedName = computed([state.fullName], () => {
   return state.fullName.value.split("").reverse().join("");
 });
 
-/**
- * Create different types of notifications
- * @param {string} type - The type of notification
- * @param {string} message - The message of the notification
- * @returns {Object} - The notification object
- */
 function createNotification(type, message) {
   const notification = {
     id: Date.now(),
